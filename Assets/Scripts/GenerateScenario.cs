@@ -22,10 +22,9 @@ public class GenerateScenario : MonoBehaviour
         instance = this;
 	}
 	
-	// Update is called once per frame
+    // Update is called once per frame
 	void Update ()
     {
-
         //if camera is close to the end of the background scenario, add 10 more background scenarios to the game
         if(transform.position.x >= (positionToSpawnBackground - 4f))
         {
@@ -39,14 +38,16 @@ public class GenerateScenario : MonoBehaviour
             float positionToSpawnBackgroundBeforeLoopStarts = positionToSpawnBackground;
             for (int i = 0; i < backgroundLoopNumber; i++)
             {
-                Vector3 positionToSpawnV3 = new Vector3(positionToSpawnBackground, 0);
-                GameObject scenario = Instantiate(background, positionToSpawnV3, Quaternion.identity);
-                backgroundList.Add(scenario);
-                print("added to bg list");
-                positionToSpawnBackground += 4.5f;
+                if (background != null)
+                {
+                    Vector3 positionToSpawnV3 = new Vector3(positionToSpawnBackground, 0);
+                    GameObject scenario = Instantiate(background, positionToSpawnV3, Quaternion.identity);
+                    backgroundList.Add(scenario);
+                    positionToSpawnBackground += 4.5f;
+                }
             }
             //if game is started, start spawning pipes at random positions
-            if (isGameStarted)
+            if (isGameStarted && pipes != null)
             {
                 float positionToInstantiatePipes = 0;
                 for (int i = 0; i < 22; i++)
@@ -54,7 +55,6 @@ public class GenerateScenario : MonoBehaviour
                     float yPos = Random.Range(-1.34f, 1.03f);
                     GameObject pipe = Instantiate(pipes, new Vector3((positionToInstantiatePipes + positionToSpawnBackgroundBeforeLoopStarts), yPos), Quaternion.identity);
                     pipeList.Add(pipe);
-                    print("added to pipe list");
                     positionToInstantiatePipes += 2;
                 }
             }
@@ -81,18 +81,26 @@ public class GenerateScenario : MonoBehaviour
 
         if(backgroundList.Count >= numbersRequiredToStartTheCleaningProcess)
         {
-            for (int i = 0; i < backgroundsLoopNumber; i++)
+            int backgroundsToRemove = Mathf.Min(backgroundsLoopNumber, backgroundList.Count);
+            for (int i = 0; i < backgroundsToRemove; i++)
             {
-                Destroy(backgroundList[0]);
-                backgroundList.RemoveAt(0);
+                if (backgroundList.Count > 0 && backgroundList[0] != null)
+                {
+                    Destroy(backgroundList[0]);
+                    backgroundList.RemoveAt(0);
+                }
             }
 
             if (isGameStarted)
             {
-                for (int i = 0; i < 20; i++)
+                int pipesToRemove = Mathf.Min(20, pipeList.Count);
+                for (int i = 0; i < pipesToRemove; i++)
                 {
-                    Destroy(pipeList[0]);
-                    pipeList.RemoveAt(0);
+                    if (pipeList.Count > 0 && pipeList[0] != null)
+                    {
+                        Destroy(pipeList[0]);
+                        pipeList.RemoveAt(0);
+                    }
                 }
             }
         }
@@ -105,16 +113,20 @@ public class GenerateScenario : MonoBehaviour
 
         for (int a = 0; a < backgroundListCount; a++)
         {
-            print("removed from bg list");
-            Destroy(backgroundList[0].gameObject);
-            backgroundList.RemoveAt(0);
+            if (backgroundList.Count > 0 && backgroundList[0] != null)
+            {
+                Destroy(backgroundList[0].gameObject);
+                backgroundList.RemoveAt(0);
+            }
         }
 
         for (int b = 0; b < pipeListCount; b++)
         {
-            print("removed from pipe list");
-            Destroy(pipeList[0].gameObject);
-            pipeList.RemoveAt(0);
+            if (pipeList.Count > 0 && pipeList[0] != null)
+            {
+                Destroy(pipeList[0].gameObject);
+                pipeList.RemoveAt(0);
+            }
         }
 
         positionToSpawnBackground = 0;

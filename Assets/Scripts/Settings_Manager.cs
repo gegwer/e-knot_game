@@ -9,10 +9,16 @@ public class Settings_Manager : MonoBehaviour
 
     public void TurnOnSettingMenu()
     {
-        startScreenCanvas.SetActive(false);
-        gameObject.SetActive(true);
+        if (Game_Manager.instance != null)
+        {
+            Game_Manager.instance.TurnOnSettingMenu();
+            return;
+        }
 
-        Game_Manager.instance.Pause();
+        if (startScreenCanvas != null)
+            startScreenCanvas.SetActive(false);
+
+        gameObject.SetActive(true);
     }
 
     public void SoundOn()

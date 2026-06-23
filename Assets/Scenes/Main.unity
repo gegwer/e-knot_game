@@ -364,6 +364,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d3839792e6e2cf419d2e4f80c4ddd69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &973150115 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9186098275972882796, guid: 4aefba3a548a77f45948b784a3fd9d91,
+    type: 3}
+  m_PrefabInstance: {fileID: 9186098276878792433}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1165119493
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,6 +403,7 @@ MonoBehaviour:
   InGameCanvas: {fileID: 932704323}
   StartScreenCanvas: {fileID: 1238663387}
   DeadCanvas: {fileID: 1704148359}
+  SettingsCanvas: {fileID: 973150115}
   flappyBird: {fileID: 1656369132}
 --- !u!4 &1165119495
 Transform:
@@ -972,7 +979,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 973150114}
+      objectReference: {fileID: 1165119494}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51f0ded803026054bbe9e545e8afbc79, type: 3}
 --- !u!1001 &9186098276878792433

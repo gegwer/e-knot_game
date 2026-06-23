@@ -10,7 +10,9 @@ public class DeadCanvas_Manager : MonoBehaviour
 
     public void SetScoreValues(int currentSc, int bestSc)
     {
-        currentScore.text = currentSc.ToString();
-        bestScore.text = bestSc.ToString();
+        if (currentScore != null)
+            currentScore.text = currentSc.ToString();
+        if (bestScore != null)
+            bestScore.text = bestSc.ToString();
     }
 }

@@ -71,7 +71,7 @@ public class FlappyBirdController : MonoBehaviour {
     {
         transform.rotation = Quaternion.Lerp(Quaternion.Euler(transform.rotation.eulerAngles), forwardPosition, 7f);
         rb2d.velocity = Vector2.zero;
-        rb2d.AddForce(Vector2.up * 150, ForceMode2D.Impulse);
+        rb2d.AddForce(Vector2.up * 250, ForceMode2D.Force);
     }
 
     void MoveCameraForward()
@@ -112,7 +112,8 @@ public class FlappyBirdController : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        Game_Manager.instance.AddScorePoint();
+        if (Game_Manager.instance != null && !IsDead)
+            Game_Manager.instance.AddScorePoint();
     }
 
     void Die()
@@ -120,7 +121,8 @@ public class FlappyBirdController : MonoBehaviour {
         if (!IsDead && isGameStarted)
         {
             IsDead = true;
-            Game_Manager.instance.Die();
+            if (Game_Manager.instance != null)
+                Game_Manager.instance.Die();
         }
     }
 }
