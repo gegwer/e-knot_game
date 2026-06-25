@@ -52,7 +52,7 @@ public class GenerateScenario : MonoBehaviour
                 float positionToInstantiatePipes = 0;
                 for (int i = 0; i < 22; i++)
                 {
-                    float yPos = Random.Range(-1.34f, 1.03f);
+                    float yPos = Random.Range(-0.8f, 0.8f);
                     GameObject pipe = Instantiate(pipes, new Vector3((positionToInstantiatePipes + positionToSpawnBackgroundBeforeLoopStarts), yPos), Quaternion.identity);
                     pipeList.Add(pipe);
                     positionToInstantiatePipes += 2;

@@ -24,10 +24,36 @@ public class Settings_Manager : MonoBehaviour
     public void SoundOn()
     {
         AudioListener.volume = 1;
+        
+        // Update AudioManager settings
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.SetMusicEnabled(true);
+            AudioManager.instance.SetSFXEnabled(true);
+        }
     }
 
     public void SoundOff()
     {
         AudioListener.volume = 0;
+        
+        // Update AudioManager settings
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.SetMusicEnabled(false);
+            AudioManager.instance.SetSFXEnabled(false);
+        }
+    }
+
+    public void ToggleMusic()
+    {
+        if (AudioManager.instance != null)
+            AudioManager.instance.ToggleMusic();
+    }
+
+    public void ToggleSFX()
+    {
+        if (AudioManager.instance != null)
+            AudioManager.instance.ToggleSFX();
     }
 }

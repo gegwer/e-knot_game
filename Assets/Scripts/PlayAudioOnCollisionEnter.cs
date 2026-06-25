@@ -8,11 +8,17 @@ public class PlayAudioOnCollisionEnter : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Player" && source != null)
+        if(collision.gameObject.tag == "Player")
         {
             FlappyBirdController controller = collision.gameObject.GetComponent<FlappyBirdController>();
             if (controller != null && !controller.IsDead)
-                source.Play();
+            {
+                // Use AudioManager if available
+                if (AudioManager.instance != null)
+                    AudioManager.instance.PlayHit();
+                else if (source != null)
+                    source.Play();
+            }
         }
     }
 }

@@ -57,11 +57,31 @@ public class FlappyBirdController : MonoBehaviour {
     {
         MoveCameraForward();
 
-        if (Input.GetMouseButtonDown(0) && isGameStarted && !isPaused && !IsDead)
+        // Mouse/Touch input support
+        bool inputDetected = false;
+        
+        if (Input.GetMouseButtonDown(0))
         {
-            source.Play();
+            inputDetected = true;
+        }
+        
+        // Touch support for mobile
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            inputDetected = true;
+        }
+
+        if (inputDetected && isGameStarted && !isPaused && !IsDead)
+        {
+            // Use AudioManager if available, fallback to local source
+            if (AudioManager.instance != null)
+                AudioManager.instance.PlayFlap();
+            else if (source != null)
+                source.Play();
+            
             Flap();
         }
+        
         //if its not paused, rotate towards the ground
         if(!isPaused)
             transform.rotation = Quaternion.Lerp(Quaternion.Euler(transform.rotation.eulerAngles), fallingPosition, 0.05f);
@@ -71,7 +91,7 @@ public class FlappyBirdController : MonoBehaviour {
     {
         transform.rotation = Quaternion.Lerp(Quaternion.Euler(transform.rotation.eulerAngles), forwardPosition, 7f);
         rb2d.velocity = Vector2.zero;
-        rb2d.AddForce(Vector2.up * 250, ForceMode2D.Force);
+        rb2d.AddForce(Vector2.up * 5.5f, ForceMode2D.Impulse);
     }
 
     void MoveCameraForward()
@@ -112,8 +132,21 @@ public class FlappyBirdController : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (Game_Manager.instance != null && !IsDead)
-            Game_Manager.instance.AddScorePoint();
+        // Check multiple possible tags for scoring
+        if (!IsDead && isGameStarted)
+        {
+            string tag = collider.gameObject.tag;
+            
+            // Score if passed through pipes or score zone
+            if (tag == "ScoreZone" || tag == "Untagged" || collider.gameObject.name.Contains("Score"))
+            {
+                if (Game_Manager.instance != null)
+                {
+                    Game_Manager.instance.AddScorePoint();
+                    Debug.Log("Score added! Current score: " + Game_Manager.instance.currentScore);
+                }
+            }
+        }
     }
 
     void Die()
@@ -121,6 +154,15 @@ public class FlappyBirdController : MonoBehaviour {
         if (!IsDead && isGameStarted)
         {
             IsDead = true;
+            
+            // Play death sound
+            if (AudioManager.instance != null)
+                AudioManager.instance.PlayDie();
+            
+            // Play death particle effect
+            if (ParticleEffectManager.instance != null)
+                ParticleEffectManager.instance.PlayDeathEffect(transform.position);
+            
             if (Game_Manager.instance != null)
                 Game_Manager.instance.Die();
         }

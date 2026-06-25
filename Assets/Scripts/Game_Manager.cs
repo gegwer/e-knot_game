@@ -49,6 +49,8 @@ public class Game_Manager : MonoBehaviour
 
     public void Home()
     {
+        Debug.Log("Home button pressed!");
+        
         IsGameStarted = false;
         if (GenerateScenario.instance != null)
             GenerateScenario.instance.CleanAllBackground();
@@ -74,6 +76,8 @@ public class Game_Manager : MonoBehaviour
             flappyBird.transform.parent.position = new Vector3(0, -0.22f, -10);
         
         UpdatePauseButtonIcon();
+        
+        Debug.Log("Returned to main menu");
     }
 
 
@@ -93,7 +97,7 @@ public class Game_Manager : MonoBehaviour
         {
             Text scoreText = InGameCanvas.transform.Find("ScoreTextWhite")?.GetComponent<Text>();
             if (scoreText != null)
-                scoreText.text = currentScore.ToString();
+                scoreText.text = "0";
         }
 
         if (StartScreenCanvas != null)
@@ -107,16 +111,37 @@ public class Game_Manager : MonoBehaviour
 
         IsGameStarted = true;
         UpdatePauseButtonIcon();
+        UpdateScoreUI();
     }
 
     public void AddScorePoint()
     {
         currentScore++;
+        
+        // Play score sound
+        if (AudioManager.instance != null)
+            AudioManager.instance.PlayScore();
+        
+        // Play score particle effect
+        if (ParticleEffectManager.instance != null && flappyBird != null)
+            ParticleEffectManager.instance.PlayScoreEffect(flappyBird.transform.position);
+        
+        UpdateScoreUI();
+    }
+
+    private void UpdateScoreUI()
+    {
         if (InGameCanvas != null)
         {
             Text scoreText = InGameCanvas.transform.Find("ScoreTextWhite")?.GetComponent<Text>();
             if (scoreText != null)
+            {
                 scoreText.text = currentScore.ToString();
+                
+                // Animate score text
+                if (UIAnimationManager.instance != null)
+                    UIAnimationManager.instance.BounceScale(scoreText.gameObject);
+            }
         }
     }
 
